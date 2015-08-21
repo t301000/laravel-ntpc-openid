@@ -1,0 +1,22 @@
+{
+    "name": "t301000/laravel-ntpc-openid",
+    "description": "Laravel 5 OpenID integration package for ntpc",
+    "keywords": ["laravel", "openid", "ntpc"],
+    "require": {
+        "php": ">=5.5.9",
+        "kounta/lightopenid": "^0.7.1",
+        "illuminate/support": "5.1.*"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "t301000",
+            "email": "t301000@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+          "T301000\\LaravelNtpcOpenid\\": "src/"
+        }
+    }
+}
