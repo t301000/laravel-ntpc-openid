@@ -10,7 +10,7 @@ class NtpcOpenid extends \LightOpenID
 	 */
 	public function __construct()
 	{
-		parent::__construct(\Request::getHttpHost());
+		parent::__construct(app('request')->getHttpHost());
 	}
 
 	/**
