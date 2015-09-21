@@ -26,5 +26,26 @@ return [
         'contact/country/home',
         'pref/language',
         'pref/timezone'
+    ],
+    'canLoginRules' => [
+        // 每條規則均為陣列
+        // 未設定規則代表不設限
+        // 可用欄位 => unitCode 單位代碼, role 身份, title 職務, group 職稱, openid OpedID 帳號
+        // 除 unitCode 為字串之外，其餘可為字串或陣列
+        // 
+        // 規則設定範例：
+        // ['unitCode' => '014569'],
+        // ['unitCode' => '014569', 'role' => '教師'],
+        // ['unitCode' => '014569', 'role' => ['教師', '學生']],
+        // ['role' => '教師'],
+        // ['unitCode' => '014569', 'title' => ['主任', '組長']],
+        // ['group' => '資訊組長'],
+        // ['openID' => ['t301']],
+        ['unitCode' => '014568'],
+        ['group' => '資訊組長'],
+        ['openID' => ['t301000']],
+        ['group' => '導師'],
+        ['unitCode' => '014568', 'role' => '教師2'],
+        ['title' => ['主任', '組長'], 'unitCode' => '014569'],
     ]
 ];
