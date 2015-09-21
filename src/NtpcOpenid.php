@@ -35,7 +35,7 @@ class NtpcOpenid extends \LightOpenID
 	}
 
 	/**
-	 * 取得　User OpenID 資料，以陣列回傳，附加 openid 帳號
+	 * 取得指定欄位之　User OpenID 資料，以陣列回傳
 	 * 傳入之參數為 OpenID 欄位名稱字串如下，多個則以陣列傳入
 	 * 
 	 * namePerson/friendly 暱稱
@@ -85,7 +85,7 @@ class NtpcOpenid extends \LightOpenID
 	 * 取得 OpenID user 指定欄位資料
 	 *
 	 * @param  string $field OpenID 欄位名稱
-	 * @return string|null
+	 * @return string|array|null
 	 */
 	public function getField($field)
 	{
@@ -195,7 +195,7 @@ class NtpcOpenid extends \LightOpenID
 	/**
 	 * 取得 單位全銜
 	 *
-	 * @return string|null
+	 * @return array|null
 	 */
 	public function getUnitFullNames()
 	{
