@@ -2,6 +2,8 @@
 
 namespace T301000\LaravelNtpcOpenid;
 
+use T301000\LaravelNtpcOpenid\Exceptions\UserIsEmptyException;
+
 class NtpcOpenid extends \LightOpenID
 {
 	/**
@@ -70,6 +72,10 @@ class NtpcOpenid extends \LightOpenID
 	 */
 	public function getUserData($fields = null)
 	{		
+		if(empty($this->user)) {
+			throw new UserIsEmptyException;
+		}
+
 		// 未傳參數則回傳 $this，可以 chain 呼叫 method
 		if(func_num_args() == 0) {
 			return $this;
@@ -95,12 +101,19 @@ class NtpcOpenid extends \LightOpenID
 
 	/**
 	 * 取得 OpenID user 指定欄位資料
+	 * 主要的取資料方法，
+	 * 除了 getUserData 之外，
+	 * 其他方法最終都是透過此方法取資料
 	 *
 	 * @param  string $field OpenID 欄位名稱
 	 * @return string|array|null
 	 */
 	public function getField($field)
 	{
+		if(empty($this->user)) {
+			throw new UserIsEmptyException;
+		}
+
 		return array_key_exists($field, $this->user) ? $this->user[$field] : null;
 	}
 
