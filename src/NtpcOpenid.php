@@ -35,6 +35,22 @@ class NtpcOpenid extends \LightOpenID
 	}
 
 	/**
+	 * 向 OpenID Provider 驗證資料是否正確
+	 * 若正確則擷取資料
+	 * 
+	 * @return bool
+	 */
+	public function validate()
+	{
+		if(parent::validate()) {
+			$this->fetchUserDataFromOpenID();
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 	 * 取得指定欄位之　User OpenID 資料，以陣列回傳
 	 * 傳入之參數為 OpenID 欄位名稱字串如下，多個則以陣列傳入
 	 * 
@@ -54,10 +70,6 @@ class NtpcOpenid extends \LightOpenID
 	 */
 	public function getUserData($fields = null)
 	{		
-		if(empty($this->user)) {
-			$this->fetchUserDataFromOpenID();
-		}
-
 		// 未傳參數則回傳 $this，可以 chain 呼叫 method
 		if(func_num_args() == 0) {
 			return $this;
@@ -89,10 +101,6 @@ class NtpcOpenid extends \LightOpenID
 	 */
 	public function getField($field)
 	{
-		if(empty($this->user)) {
-			$this->fetchUserDataFromOpenID();
-		}
-
 		return array_key_exists($field, $this->user) ? $this->user[$field] : null;
 	}
 
@@ -113,7 +121,7 @@ class NtpcOpenid extends \LightOpenID
 	 */
 	public function getOpenID()
 	{
-		return $this->user['openid'];
+		return $this->getField('openid');
 	}
 
 	/**
@@ -199,7 +207,7 @@ class NtpcOpenid extends \LightOpenID
 	 */
 	public function getUnitFullNames()
 	{
-		return $this->collectAuthorizedInfoToArray('name');
+		return $this->collectAuthorizedInfoToArray('name', true, false);
 	}
 
 	/**
@@ -283,22 +291,30 @@ class NtpcOpenid extends \LightOpenID
 		// 取得所有登入規則
 		$rules = config('ntpcopenid.canLoginRules');
 
+		// for debug
 		echo "<h4>登入規則總覽：</h4><pre>";
 		var_dump($rules);
 		echo "</pre>";
+		// for debug end
 
 		// 未設定規則，允許登入
 		if(count($rules) === 0) {
-			// return true;
+			
+			// for debug
 			return '<br><br>you-can-login';
+			// for debug end
+
+			return true;
 		}
 
 		// 逐條檢查
 		foreach ($rules as $rule) {
 
+			// for debug
 			echo "<h5>驗證結果：</h5><pre>";
 			var_dump($rule);
 			echo "</pre>";
+			// for debug end
 
 			// 每條規則逐一檢查限制欄位
 			foreach ($rule as $key => $need) {
@@ -310,12 +326,17 @@ class NtpcOpenid extends \LightOpenID
 					// for debug
 					echo $key . ":";
 					echo $result ? '通過 ' : '不通過 ';
+					// for debug end
 
 					// 第一次遇到欄位不通過時
 					// 立即中斷該條規則之檢查
 					// 略過剩餘欄位之檢查
 					if(!$result) {
+						
+						// for debug
 						echo "<br>";
+						// for debug end
+						
 						break;
 					}
 				}
@@ -327,13 +348,21 @@ class NtpcOpenid extends \LightOpenID
 			}
 
 			// 目前規則檢查通過，回傳 true 允許登入
-			// return true;
+			
+			// for debug
 			return '<br><br><b>you-can-login</b>';
+			// for debug end
+			
+			return true;
 		}
 
 		// 所有規則檢查都未通過，回傳 false 拒絕登入
-		// return false;
+		
+		// for debug
 		return '<br><b>you-can-not-login</b>';
+		// for debug end
+		
+		return false;
 	}
 
 	/**
@@ -355,31 +384,7 @@ class NtpcOpenid extends \LightOpenID
 	 */
 	public function checkRole(array $rule)
 	{
-		// $userRoles = $this->getRoles();
-
-		// if(is_null($userRoles)) {
-		// 	return false;
-		// }
-
-		// $need = is_string($rule['role']) ? array($rule['role']) : $rule['role'];
-
-		// // 如果有限制單位代碼
-		// if(array_key_exists('unitCode', $rule)) {
-		// 	return count(array_intersect($userRoles[$rule['unitCode']], $need)) > 0;
-		// }
-
-		// return count(array_intersect(array_flatten($userRoles), $need)) > 0;
-		// // foreach ($userRoles as $key => $role) {
-		// // 	$result = in_array($role[0], $need);
-		// // 	if($result) {
-		// // 		return true;
-		// // 	}
-		// // }
-
-		// // return false;
-		// // 
 		return $this->checkSingleRuleField($rule, 'role');
-		
 	}
 
 	/**
@@ -390,21 +395,6 @@ class NtpcOpenid extends \LightOpenID
 	 */
 	public function checkTitle(array $rule)
 	{
-		// $userTitles = $this->getTitles();
-
-		// if(is_null($userTitles)) {
-		// 	return false;
-		// }
-
-		// $need = is_string($rule['title']) ? array($rule['title']) : $rule['title'];
-
-		// // 如果有限制單位代碼
-		// if(array_key_exists('unitCode', $rule)) {
-		// 	return count(array_intersect($userTitles[$rule['unitCode']], $need)) > 0;
-		// }
-
-		// return count(array_intersect(array_flatten($userTitles), $need)) > 0;
-		// 
 		return $this->checkSingleRuleField($rule, 'title');
 	}
 
@@ -416,21 +406,6 @@ class NtpcOpenid extends \LightOpenID
 	 */
 	public function checkGroup(array $rule)
 	{
-		// $userGroups = $this->getGroups();
-
-		// if(is_null($userGroups)) {
-		// 	return false;
-		// }
-
-		// $need = is_string($rule['group']) ? array($rule['group']) : $rule['group'];
-
-		// // 如果有限制單位代碼
-		// if(array_key_exists('unitCode', $rule)) {
-		// 	return count(array_intersect($userGroups[$rule['unitCode']], $need)) > 0;
-		// }
-
-		// return count(array_intersect(array_flatten($userGroups), $need)) > 0;
-		// 
 		return $this->checkSingleRuleField($rule, 'group');
 	}
 
@@ -444,7 +419,7 @@ class NtpcOpenid extends \LightOpenID
 	{
 		$need = is_string($rule['openID']) ? array($rule['openID']) : $rule['openID'];
 
-		return in_array($this->user['openid'], $need);
+		return in_array($this->getOpenID(), $need);
 	}
 
 
@@ -498,9 +473,10 @@ class NtpcOpenid extends \LightOpenID
 	 *
 	 * @param  string $field 欄位名稱
 	 * @param  bool $hasKey 是否以單位代碼為索引
+	 * @param  bool $subArray 元素是否為陣列（$hasKey = true 時才有作用）
 	 * @return array|null
 	 */
-	protected function collectAuthorizedInfoToArray($field, $hasKey = false)
+	protected function collectAuthorizedInfoToArray($field, $hasKey = false, $subArray = true)
 	{
 		$authorizedInfo = $this->getAuthorizedInfo();
 
@@ -508,10 +484,18 @@ class NtpcOpenid extends \LightOpenID
 		if(!is_null($authorizedInfo)) {
 			$data = [];
 
-			// 回傳之陣列以單位代碼為索引，元素為陣列
+			// 回傳之陣列以單位代碼為索引
 			if($hasKey) {
-				foreach ($authorizedInfo as $single) {
-					$data[$single['id']][] = $single[$field];
+				if($subArray) {
+					// 元素為陣列
+					foreach ($authorizedInfo as $single) {
+						$data[$single['id']][] = $single[$field];
+					}
+				}else{
+					// 直接賦值
+					foreach ($authorizedInfo as $single) {
+						$data[$single['id']] = $single[$field];
+					}
 				}
 
 				return $data;
@@ -540,6 +524,11 @@ class NtpcOpenid extends \LightOpenID
 	protected function checkSingleRuleField(array $rule, $type)
 	{
 		$method = 'get' . ucfirst($type) . 's';
+
+		// 呼叫以下方法取得 user 具備的身份陣列、職務陣列、職稱陣列
+		// $this->getRoles()
+		// $this->getTitles()
+		// $this->getGroups()
 		$userHas = $this->$method();
 
 		if(is_null($userHas)) {
