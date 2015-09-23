@@ -12,6 +12,23 @@
  * 'pref/language', //年級班級座號 6 碼
  * 'pref/timezone' // 授權資訊[學校別、身分別、職稱別、職務別]，例如：
  * [{"id":"014569","name":"新北市立育林國民中學","role":"教師","title":"專任教師","groups":["科任教師"]}]
+ *
+ *
+ * canLoginRules 陣列可設定登入規則
+ * 每條規則均為陣列
+ * 未設定規則代表不設限
+ * 可用欄位 => unitCode 單位代碼, role 身份, title 職務, group 職稱, openID OpedID 帳號
+ * 除 unitCode 為字串之外，其餘可為字串或陣列
+ * 
+ * 規則設定範例：
+ * ['unitCode' => '014569'],
+ * ['unitCode' => '014569', 'role' => '教師'],
+ * ['unitCode' => '014569', 'role' => ['教師', '學生']],
+ * ['role' => '教師'],
+ * ['unitCode' => '014569', 'title' => ['主任', '組長']],
+ * ['group' => '資訊組長'],
+ * ['openID' => ['somebody']],
+ * 
  */
 
 return [
@@ -27,25 +44,5 @@ return [
         'pref/language',
         'pref/timezone'
     ],
-    'canLoginRules' => [
-        // 每條規則均為陣列
-        // 未設定規則代表不設限
-        // 可用欄位 => unitCode 單位代碼, role 身份, title 職務, group 職稱, openID OpedID 帳號
-        // 除 unitCode 為字串之外，其餘可為字串或陣列
-        // 
-        // 規則設定範例：
-        // ['unitCode' => '014569'],
-        // ['unitCode' => '014569', 'role' => '教師'],
-        // ['unitCode' => '014569', 'role' => ['教師', '學生']],
-        // ['role' => '教師'],
-        // ['unitCode' => '014569', 'title' => ['主任', '組長']],
-        // ['group' => '資訊組長'],
-        // ['openID' => ['somebody']],
-        ['unitCode' => '014568'],
-        ['group' => '資訊組長'],
-        ['openID' => ['t301000']],
-        ['group' => '導師'],
-        ['unitCode' => '014568', 'role' => '教師2'],
-        ['title' => ['主任', '組長'], 'unitCode' => '014569'],
-    ]
+    'canLoginRules' => []
 ];
