@@ -3,6 +3,7 @@
 namespace T301000\LaravelNtpcOpenid;
 
 use T301000\LaravelNtpcOpenid\Exceptions\UserIsEmptyException;
+use T301000\LaravelNtpcOpenid\Exceptions\SingleRuleMustBeArrayException;
 
 class NtpcOpenid extends \LightOpenID
 {
@@ -304,30 +305,17 @@ class NtpcOpenid extends \LightOpenID
 		// 取得所有登入規則
 		$rules = config('ntpcopenid.canLoginRules');
 
-		// for debug
-		echo "<h4>登入規則總覽：</h4><pre>";
-		var_dump($rules);
-		echo "</pre>";
-		// for debug end
-
 		// 未設定規則，允許登入
 		if(count($rules) === 0) {
-			
-			// for debug
-			return '<br><br>you-can-login';
-			// for debug end
-
 			return true;
 		}
 
 		// 逐條檢查
 		foreach ($rules as $rule) {
-
-			// for debug
-			echo "<h5>驗證結果：</h5><pre>";
-			var_dump($rule);
-			echo "</pre>";
-			// for debug end
+            // 檢查每條登入規則是否為陣列
+			if (!is_array($rule)) {
+                throw new SingleRuleMustBeArrayException;
+            }
 
 			// 每條規則逐一檢查限制欄位
 			foreach ($rule as $key => $need) {
@@ -335,21 +323,11 @@ class NtpcOpenid extends \LightOpenID
 				if(method_exists($this, $method)) {
 					// 欄位檢查結果
 					$result = $this->$method($rule);
-					
-					// for debug
-					echo $key . ":";
-					echo $result ? '通過 ' : '不通過 ';
-					// for debug end
 
 					// 第一次遇到欄位不通過時
 					// 立即中斷該條規則之檢查
 					// 略過剩餘欄位之檢查
 					if(!$result) {
-						
-						// for debug
-						echo "<br>";
-						// for debug end
-						
 						break;
 					}
 				}
@@ -361,20 +339,10 @@ class NtpcOpenid extends \LightOpenID
 			}
 
 			// 目前規則檢查通過，回傳 true 允許登入
-			
-			// for debug
-			return '<br><br><b>you-can-login</b>';
-			// for debug end
-			
 			return true;
 		}
 
 		// 所有規則檢查都未通過，回傳 false 拒絕登入
-		
-		// for debug
-		return '<br><b>you-can-not-login</b>';
-		// for debug end
-		
 		return false;
 	}
 
