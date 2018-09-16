@@ -40,8 +40,8 @@ class NTPCOpenIDController extends Controller
                     // 取得 user data 陣列
                     $data = $openid->getUserData('*');
                     
-                    // 將取得的資料存入 session
-                    session([config('ntpcopenid.sessionKey') => $data]);
+                    // 將取得的資料存入 session，只存在至下一個 request 
+                    session()->flash(config('ntpcopenid.sessionKey'), $data);
 
                     return redirect(config('ntpcopenid.redirectToUrls.login_allow'));
                     break;
