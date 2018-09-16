@@ -297,11 +297,20 @@ class NtpcOpenid extends \LightOpenID
 
 	/**
 	 * 檢查 是否可登入
-	 * 
-	 * @return bool
+     *
+	 * @param  array  $user
+	 *
+     * @return bool
 	 */
-	public function canLogin()
+	public function canLogin(array $user = null)
 	{
+        if (!is_null($user)) {
+            // 有傳入則使用傳入之資料
+            $this->user = $user;
+        } else {
+            // 沒有傳入則使用 session 之資料
+            $this->user = session(config('ntpcopenid.sessionKey'));
+        }
 		// 取得所有登入規則
 		$rules = config('ntpcopenid.canLoginRules');
 
