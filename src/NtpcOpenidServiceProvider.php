@@ -38,7 +38,7 @@ class NtpcOpenidServiceProvider extends ServiceProvider
         $configPath = __DIR__ . '/../config/ntpcopenid.php';
         $this->mergeConfigFrom($configPath, 'ntpcopenid');
      
-        $this->app->bind('ntpcopenid', 'T301000\LaravelNtpcOpenid\NtpcOpenid');
+        $this->app->singleton('ntpcopenid', 'T301000\LaravelNtpcOpenid\NtpcOpenid');
     }
 
     /**

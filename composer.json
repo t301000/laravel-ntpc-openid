@@ -21,9 +21,12 @@
     },
     "extra": {
         "laravel": {
-	    "providers": [
-	        "T301000\\LaravelNtpcOpenid\\NtpcOpenidServiceProvider"
-	    ]
-	}
+    	    "providers": [
+    	        "T301000\\LaravelNtpcOpenid\\NtpcOpenidServiceProvider"
+    	    ],
+            "aliases": {
+                "NTPCOpenID": "T301000\\LaravelNtpcOpenid\\Facades\\NTPCOpenID"
+            }
+    	}
     }
 }

@@ -44,5 +44,14 @@ return [
         'pref/language',
         'pref/timezone'
     ],
-    'canLoginRules' => []
+    'canLoginRules' => [],
+    'prefix' => 'ntpcopenid', // 相關路由之前綴字串
+    'sessionKey' => 'ntpcopenid', // 存放取回之 OpenID 資料之 session key
+    'redirectToUrls' => [
+        'user_cancel' => '/cancel', // user 取消認證 時導向至哪裡
+        'validate_fail' => '/invalidate', // user 驗證未過 時導向至哪裡
+        'login_allow' => '/home', // user 登入後 導向至哪裡
+        'login_deny' => '/deny', // user 被拒絕登入 時導向至哪裡
+        'other' => '/other', // 其他狀況未經正常程序，如直接輸入網址瀏覽，導向至哪裡
+    ]
 ];
