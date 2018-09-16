@@ -307,10 +307,11 @@ class NtpcOpenid extends \LightOpenID
         if (!is_null($user)) {
             // 有傳入則使用傳入之資料
             $this->user = $user;
-        } else {
-            // 沒有傳入則使用 session 之資料
+        } else if (!is_null(session(config('ntpcopenid.sessionKey')))) {
+            // 沒有傳入但 session 有，則使用 session 之資料
             $this->user = session(config('ntpcopenid.sessionKey'));
         }
+
 		// 取得所有登入規則
 		$rules = config('ntpcopenid.canLoginRules');
 
