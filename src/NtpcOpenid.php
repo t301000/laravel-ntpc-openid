@@ -19,7 +19,9 @@ class NtpcOpenid extends \LightOpenID
 	 */
 	public function __construct()
 	{
-		parent::__construct(app('request')->getHttpHost());
+		if (isset($_SERVER['REQUEST_URI'])) {
+            parent::__construct(app('request')->getHttpHost());
+        }
 	}
 
 	/**
