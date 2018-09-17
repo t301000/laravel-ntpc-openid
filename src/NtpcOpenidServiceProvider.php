@@ -28,7 +28,7 @@ class NtpcOpenidServiceProvider extends ServiceProvider
         $this->publishes([$configPath => config_path('ntpcopenid.php')], 'config');
 
         $this->loadViewsFrom(__DIR__.'/views', 'ntpcopenid');
-        $this->publishes([__DIR__.'/views' => resource_path('views/vendor/ntpcopenid'), 'views']);
+        $this->publishes([__DIR__.'/views' => resource_path('views/vendor/ntpcopenid')], 'views');
     }
 
     /**
