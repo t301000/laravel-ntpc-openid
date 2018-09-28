@@ -14,7 +14,18 @@ class NTPCOpenIDController extends Controller
     public function startOpenID()
     {
         $openid = app('ntpcopenid');
-        return redirect($openid->authUrl());
+
+        // 如果略過正常 OpenID 流程，開發測試時使用
+        if (config('ntpcopenid.skipRealOpenID')) {
+            // 使用假資料
+            $data = config('ntpcopenid.fakeUsers')[config('ntpcopenid.fakeUserIndex')];
+
+            // 選擇身份或檢查是否可以登入
+            return $this->selectRoleOrLoginCheck($data);
+        }
+
+        // 正式啟動 OpenID 認證流程
+        return redirect()->away($openid->authUrl());
     }
 
     /**
@@ -36,13 +47,9 @@ class NTPCOpenIDController extends Controller
                 
                 // 取得 user data 陣列
                 $data = $openid->getUserData('*');
-                
-                // 將取得的資料存入 session
-                session([config('ntpcopenid.sessionKey') => $data]);
-                // session()->flash(config('ntpcopenid.sessionKey'), $data);
 
-                // 多重身份時選擇身份，否則進行登入檢查
-                return count($data['pref/timezone']) > 1 ? $this->selectRole($data) : $this->loginCheck();
+                // 選擇身份或檢查是否可以登入
+                return $this->selectRoleOrLoginCheck($data);
                 break;
 
             default: // 其他，如直接輸入網址瀏覽
@@ -81,6 +88,7 @@ class NTPCOpenIDController extends Controller
             'name' => $user['namePerson'],
             'authInfos' => $user['pref/timezone'],
         ];
+
         return view('ntpcopenid::select-role')->with('user', $data);
     }
 
@@ -108,5 +116,22 @@ class NTPCOpenIDController extends Controller
         session()->forget(config('ntpcopenid.sessionKey'));
         
         return redirect($toUrl);
+    }
+
+    /**
+     * 處理資料並決定下一步是 選擇身份 或 檢查是否可以登入
+     *
+     * @param array $data
+     *
+     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
+     */
+    protected function selectRoleOrLoginCheck(array $data)
+    {
+        // 將取得的資料存入 session
+        session([config('ntpcopenid.sessionKey') => $data]);
+        // session()->flash(config('ntpcopenid.sessionKey'), $data);
+
+        // 多重身份時選擇身份，否則進行登入檢查
+        return count($data['pref/timezone']) > 1 ? $this->selectRole($data) : $this->loginCheck();
     }
 }

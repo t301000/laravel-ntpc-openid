@@ -53,5 +53,81 @@ return [
         'login_allow' => '/', // user 允許登入後 導向至哪裡
         'login_deny' => '/', // user 被拒絕登入 時導向至哪裡
         'other' => '/', // 其他狀況未經正常程序，如直接輸入網址瀏覽，導向至哪裡
-    ]
+    ],
+
+    /* 以下只有開發時測試用 */
+    'skipRealOpenID' => false, // 略過真正的 OpenID 流程，測試時使用
+    'fakeUserIndex' => 0, // 使用哪一筆假資料，index 由 0 開始
+    'fakeUsers' => [ // 測試用假資料，每筆假資料為陣列，可自行增加
+        // index = 0
+        [
+            "namePerson/friendly" => "林小明",
+            "contact/email" => "t001@apps.ntpc.edu.tw",
+            "namePerson" => "林小明",
+            "birthDate" => "2000-08-19",
+            "person/gender" => "M",
+            "contact/postalCode/home" => "5EE2EFC0E0722558C2B47AA5461F60FE69F811651068678F6F7F264BAF1234DA",
+            "contact/country/home" => "育林國中",
+            "pref/language" => "000000",
+            "pref/timezone" => [
+                [
+                    "id" => "014569",
+                    "name" => "新北市立育林國民中學",
+                    "role" => "家長",
+                    "title" => "其他",
+                    "groups" => ["其他"]
+                ],
+                [
+                    "id" => "014569",
+                    "name" => "新北市立育林國民中學",
+                    "role" => "教師",
+                    "title" => "教師兼組長",
+                    "groups" => ["資訊組長"]
+                ],
+            ],
+            "openid" => "t001"
+        ],
+        // index = 1
+        [
+            "namePerson/friendly" => "黃小保",
+            "contact/email" => "s001@apps.ntpc.edu.tw",
+            "namePerson" => "黃小寶",
+            "birthDate" => "2003-10-09",
+            "person/gender" => "M",
+            "contact/postalCode/home" => "5FF2GGC0E0722558C2B47GG5461F60FE69F811651068678F6F7F264BAF5678GG",
+            "contact/country/home" => "育林國中",
+            "pref/language" => "070215",
+            "pref/timezone" => [
+                [
+                    "id" => "014569",
+                    "name" => "新北市立育林國民中學",
+                    "role" => "學生",
+                    "title" => "其他",
+                    "groups" => ["其他"]
+                ],
+            ],
+            "openid" => "s001"
+        ],
+        // index = 2
+        [
+            "namePerson/friendly" => "許小誠",
+            "contact/email" => "s002@apps.ntpc.edu.tw",
+            "namePerson" => "許小誠",
+            "birthDate" => "2003-12-09",
+            "person/gender" => "M",
+            "contact/postalCode/home" => "5FF2GGC0E0722558C2B47GG5461F60GG69F811651012345F6F7F264BAF5678GG",
+            "contact/country/home" => "育林國中",
+            "pref/language" => "081005",
+            "pref/timezone" => [
+                [
+                    "id" => "014569",
+                    "name" => "新北市立育林國民中學",
+                    "role" => "學生",
+                    "title" => "其他",
+                    "groups" => ["其他"]
+                ],
+            ],
+            "openid" => "s002"
+        ],
+    ],
 ];
