@@ -18,7 +18,9 @@ class NTPCOpenIDController extends Controller
         // 如果略過正常 OpenID 流程，開發測試時使用
         if (config('ntpcopenid.skipRealOpenID')) {
             // 使用假資料
-            $data = config('ntpcopenid.fakeUsers')[config('ntpcopenid.fakeUserIndex')];
+            // get or post id 則優先使用，無則使用 fakeUserIndex
+            $fakeId = !is_null(request('id')) ? (int) request('id') : config('ntpcopenid.fakeUserIndex');
+            $data = config('ntpcopenid.fakeUsers')[$fakeId];
 
             // 選擇身份或檢查是否可以登入
             return $this->selectRoleOrLoginCheck($data);
