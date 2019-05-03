@@ -3,7 +3,7 @@
 namespace T301000\LaravelNtpcOpenid\Exceptions;
 
 
-class SingleRuleMustBeArray extends \Exception
+class SingleRuleMustBeArrayException extends \Exception
 {
     /**
      * @param string  $message
