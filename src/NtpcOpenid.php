@@ -3,6 +3,7 @@
 namespace T301000\LaravelNtpcOpenid;
 
 use T301000\LaravelNtpcOpenid\Exceptions\UserIsEmptyException;
+use T301000\LaravelNtpcOpenid\Exceptions\RuleErrorException;
 use T301000\LaravelNtpcOpenid\Exceptions\SingleRuleMustBeArrayException;
 
 class NtpcOpenid extends \LightOpenID
@@ -342,6 +343,9 @@ class NtpcOpenid extends \LightOpenID
 					if(!$result) {
 						break;
 					}
+				} else {
+					// 欄位或規則格式錯誤
+					throw new RuleErrorException;
 				}
 			}
 
