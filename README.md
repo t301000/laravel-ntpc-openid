@@ -1,4 +1,4 @@
-## Laravel 5.1 OpenID 整合套件 for 新北市
+## Laravel OpenID 整合套件 for 新北市
 
 安裝、設定與使用範例請見說明文件。
 

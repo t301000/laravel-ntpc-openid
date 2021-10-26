@@ -6,7 +6,7 @@ use T301000\LaravelNtpcOpenid\Exceptions\UserIsEmptyException;
 use T301000\LaravelNtpcOpenid\Exceptions\RuleErrorException;
 use T301000\LaravelNtpcOpenid\Exceptions\SingleRuleMustBeArrayException;
 
-class NtpcOpenid extends \LightOpenID
+class NtpcOpenid extends LightOpenID
 {
 	/**
      * 存放取自 OpenID 的 user data

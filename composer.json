@@ -4,7 +4,6 @@
     "keywords": ["laravel", "openid", "ntpc"],
     "require": {
         "php": ">=5.5.9",
-        "kounta/lightopenid": "^0.7.1",
         "illuminate/support": "^5.1|^6|^7|^8"
     },
     "license": "MIT",
