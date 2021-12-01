@@ -31,8 +31,9 @@ class NTPCOpenID extends Facade
                 'namespace' => '\T301000\LaravelNtpcOpenid\Controllers'
             ],
             function() {
-                Route::post('login', 'NTPCOpenIDController@startOpenID')->name('ntpcopenid.login.start'); // 啟動 OpenID 認證流程
-                Route::get('login', 'NTPCOpenIDController@process')->name('ntpcopenid.login.back'); // OpenID 導回
+                Route::post('start', 'NTPCOpenIDController@startOpenID')->name('ntpcopenid.login.start'); // 啟動 OpenID 認證流程
+                Route::get('login', 'NTPCOpenIDController@process')->name('ntpcopenid.login.back'); // OpenID 導回 by GET
+                Route::post('login', 'NTPCOpenIDController@process'); // OpenID 導回 by POST
                 Route::get('check', 'NTPCOpenIDController@loginCheck')->name('ntpcopenid.login.check'); // 檢查是否允許登入
             }
         );

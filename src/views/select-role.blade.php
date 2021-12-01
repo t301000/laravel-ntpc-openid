@@ -46,7 +46,7 @@
                     <div>
                         {{ $authInfo['name'] }}&nbsp;&nbsp;&nbsp;&nbsp;
                         {{ $authInfo['role'] }}&nbsp;&nbsp;&nbsp;&nbsp;
-                        {{ implode($authInfo['groups'], ', ') }}
+                        {{ implode(', ', $authInfo['groups']) }}
                     </div>
                 </a>
             @endforeach
